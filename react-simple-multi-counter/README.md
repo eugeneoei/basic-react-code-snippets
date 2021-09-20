@@ -14,7 +14,7 @@ Acccording to React's documention,
 
 `useEffect` accepts a dependecy array as its second argument, where the callback is invoked only when values in the dependecy array changes.
 
-In this example, `resetCount` (which tracks the number of times all counters are reset) is passed to this dependecy array.
+In this example, `resetCount` (which tracks the number of times all counters are reset) is passed to the dependecy array.
 
 ```js
 useEffect(() => {
