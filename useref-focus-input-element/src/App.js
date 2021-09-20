@@ -53,7 +53,7 @@ const App = () => {
 								className='btn btn-primary'
 								onClick={handleFocusFirstInputElement}
 							>
-								Click me to focus on input element!
+								Click me to focus on FIRST input element!
 							</button>
 						</div>
 					</div>
@@ -85,7 +85,7 @@ const App = () => {
 								className='btn btn-primary'
 								onClick={handleFocusSecondInputElement}
 							>
-								Click me to focus on input element!
+								Click me to focus on SECOND input element!
 							</button>
 						</div>
 					</div>
