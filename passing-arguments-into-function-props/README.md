@@ -1,6 +1,6 @@
 # Passing Arguments into Function Props
 
-This code snippet example repo demonstrates how you can pass parameter(s) to a function prop from a child component.
+This code snippet example repo demonstrates how you can pass parameter(s) to a function prop from a child component. This demo is based on the React Cities homework!
 
 # Demo
 
