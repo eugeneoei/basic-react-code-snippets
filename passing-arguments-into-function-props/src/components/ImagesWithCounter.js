@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import BigImage from './BigImage'
-import SmallImage from './SmallImage'
+import SmallImageWithCounter from './SmallImageWithCounter'
 import data from '../data/data'
 
 const defaultImage = data[0]
 
-const Images = props => {
+const ImagesWithCounter = props => {
 
 	const { showClickCount } = props
 
@@ -28,7 +28,7 @@ const Images = props => {
 			<div className='row'>
 				{
 					data.map(d => (
-						<SmallImage
+						<SmallImageWithCounter
 							key={d.city}
 							imageUrl={d.img}
 							imageName={d.city}
@@ -43,6 +43,4 @@ const Images = props => {
 	)
 }
 
-
-
-export default Images
+export default ImagesWithCounter

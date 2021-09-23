@@ -1,3 +1,53 @@
 .app {
 	text-align: center;
 }
+
+.divider {
+	height: 1px;
+	background-color: lightgrey;
+	margin: 25px 0;
+}
+
+.image-container {
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.big-image {
+	width: 100%;
+}
+
+.small-image {
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+	opacity: 0.4;
+}
+
+.small-image:hover {
+	opacity: 1;
+}
+
+.small-image-selected {
+	opacity: 1;
+	cursor: not-allowed;
+}
+
+.small-image-container {
+	position: relative;
+}
+
+.small-image-counter {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	background-color: navy;
+	color: white;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	right: 0;
+	top: 0;
+	border-bottom-left-radius: 20px;
+}

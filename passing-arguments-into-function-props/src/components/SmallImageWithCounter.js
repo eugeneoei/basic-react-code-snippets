@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classNames from 'classnames/bind'
 import styles from '../App.css'
 
 const cx = classNames.bind(styles)
 
-const SmallImage = props => {
+const SmallImageWithCounter = props => {
+
+	const [clickCount, setClickCount] = useState(0)
 
 	const {
 		imageUrl,
@@ -16,11 +18,14 @@ const SmallImage = props => {
 	const isImageSelected = selectedImageName === imageName
 
 	const handleImageClick = () => {
-		selectImage(imageUrl, imageName)
+		if (!isImageSelected) {
+			setClickCount(clickCount + 1)
+			selectImage(imageUrl, imageName)
+		}
 	}
 	
 	return (
-		<div className='col-6 gx-0'>
+		<div className='col-6 gx-0 small-image-container'>
 			<img
 				className={
 					cx(
@@ -30,10 +35,13 @@ const SmallImage = props => {
 				}
 				src={imageUrl}
 				alt={imageName}
-				onClick={isImageSelected ? null : handleImageClick}
+				onClick={handleImageClick}
 			/>
+			<div className='small-image-counter'>
+				{clickCount}
+			</div>
 		</div>
 	)
 }
 
-export default SmallImage
+export default SmallImageWithCounter

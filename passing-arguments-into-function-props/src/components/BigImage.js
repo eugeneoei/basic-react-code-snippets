@@ -1,5 +1,4 @@
 import React from 'react'
-import './BigImage.css'
 
 const BigImage = props => {
 
