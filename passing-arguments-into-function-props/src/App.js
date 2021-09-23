@@ -1,3 +1,5 @@
+import Images from './components/Images'
+
 import './App.css'
 
 const App = () => {
@@ -6,6 +8,7 @@ const App = () => {
 			<h1 className='mb-4'>
 				Passing Arguments into Function Props
 			</h1>
+			<Images />
 		</div>
 	)
 }
