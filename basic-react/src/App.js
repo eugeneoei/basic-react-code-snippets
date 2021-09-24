@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import strawberry from './data'
 import './App.css'
-
 import { calculateSum } from './calculation'
+import FormParentComponent from './components/FormParentComponent'
 
 console.log(strawberry)
 
@@ -152,6 +152,7 @@ const App = () => {
 					Tell me the value of the uncontrolled input element NOW!
 				</button>
 			</div>
+			<FormParentComponent />
 		</div>
 	)
 }
