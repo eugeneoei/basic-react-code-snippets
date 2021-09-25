@@ -8,7 +8,7 @@ const App = () => {
 			<h1 className='mb-4'>
 				Passing Arguments into Function Props
 			</h1>
-			<Images showClickCount={false} />
+			<Images />
 			<div className='divider'></div>
 			<h1 className='mb-4'>
 				Passing Arguments into Function Props With Click Counter

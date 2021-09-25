@@ -5,9 +5,7 @@ import data from '../data/data'
 
 const defaultImage = data[0]
 
-const ImagesWithCounter = props => {
-
-	const { showClickCount } = props
+const ImagesWithCounter = () => {
 
 	const [bigImageUrl, setBigImageUrl] = useState(defaultImage.img)
 	const [bigImageImage, setBigImageName] = useState(defaultImage.city)
@@ -33,7 +31,6 @@ const ImagesWithCounter = props => {
 							imageUrl={d.img}
 							imageName={d.city}
 							selectedImageName={bigImageImage}
-							showClickCount={showClickCount}
 							selectImage={handleUpdateBigImage}
 						/>
 					))
