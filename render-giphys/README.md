@@ -10,21 +10,27 @@ Rather, look at this as an alternative approach and focus on:
 
 # What the end product looks like?
 
+### Loading giphy during API call
+
+![image-one](./assets/loading-giphy.png)
+
+---
+
 ### Add a giphy to favourites
 
-![image-one](./assets/image-one.png)
+![image-one](./assets/add-giphy.png)
 
 ---
 
 ### Remove a giphy from favourites
 
-![image-two](./assets/image-two.png)
+![image-two](./assets/remove-giphy.png)
 
 ---
 
 ### Prevent a giphy from being added to favourites
 
-![image-three](./assets/image-three.png)
+![image-three](./assets/prevent-giphy.png)
 
 # Running this `react` app
 
