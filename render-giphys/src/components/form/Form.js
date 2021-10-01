@@ -48,6 +48,7 @@ const Form = props => {
 									<button
 										className='btn btn-outline-primary mt-3'
 										disabled={inputText === ''}
+										onClick={handleSubmit}
 									>
 										Go!
 									</button>
