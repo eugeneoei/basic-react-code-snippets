@@ -104,15 +104,15 @@ const handleFetchNewGiphy = useCallback(
 .
 ```
 
-Note the use of `unwrap()` after the dispatching `fetchGiphy`. It is necessary to call `unwrap`...
+Note the use of `unwrap()` after dispatching `fetchGiphy`. It is necessary to call `unwrap`...
 
 > to extract the `payload` of a `fulfilled` action or to throw either the `error` or, if available, `payload` created by `rejectWithValue` from a `rejected` action.
 
-where the error will be thrown to the `catch` block. You can read more about it [here](https://redux-toolkit.js.org/api/createAsyncThunk#unwrapping-result-actions).
+In this case, when `fetchGiphy` action is rejected, the error will be caught within the `catch` block. You can read more about `unwrap` [here](https://redux-toolkit.js.org/api/createAsyncThunk#unwrapping-result-actions).
 
-# Updating `redux` store within `createAsyncThunk`
+# Updating a `slice` of `redux` store within `createAsyncThunk`
 
-Depending how your `redux` store is structured, you might want to update another slice of your store after the asynchronous API call is completed. You can do so within `createAsyncThunk`.
+Depending on how your `redux` store is structured, you might want to update another slice of your store after the asynchronous API call is completed. If this is the case, you can do so within `createAsyncThunk`.
 
 ```js
 export const fetchGiphy = createAsyncThunk(
@@ -169,7 +169,7 @@ The additional options include:
 - rejectWithValue(value, [meta])
 - fulfillWithValue(value, meta)
 
-You may read more about it [here](https://redux-toolkit.js.org/api/createAsyncThunk#payloadcreator).
+You may read more about `payloadCreator` [here](https://redux-toolkit.js.org/api/createAsyncThunk#payloadcreator).
 
 In this example, notice `thunkAPI` is destructured and the action `updateCounter` is dispatched after asynchronous API call is completed where a `counter` value tracks the number of times the giphy API is called.
 
