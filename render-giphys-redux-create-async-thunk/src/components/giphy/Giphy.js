@@ -12,7 +12,6 @@ const Giphy = () => {
 	const dispatch = useDispatch()
 
 	const [isGettingGiphy, setIsGettingGiphy] = useState(true)
-	// const [isGettingGiphy, setIsGettingGiphy] = useState(false)
 	const [fetchGiphyErrorMessage, setFetchGiphyErrorMessage] = useState(null)
 	const [doesGiphyExistInFavourite, setDoesGiphyExistInFavourite] = useState(false)
 

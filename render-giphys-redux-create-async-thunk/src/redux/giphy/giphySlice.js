@@ -15,6 +15,8 @@ export const giphySlice = createSlice({
 		}
 	},
 	extraReducers: builder => {
+		// handling only fulfilled promise
+		// loading and error handled within Giphy.js component
 		builder.addCase(fetchGiphy.fulfilled, (state, action) => {
 			state.giphy = action.payload
 			state.giphys.push(action.payload)

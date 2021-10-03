@@ -1,70 +1,172 @@
-# Getting Started with Create React App
+# Render Giphys Homework Implemented with React-Redux-createAsyncThunk
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is an approach to w16d2 Render Giphys Homework but with `redux` and `createAsyncThunk`.
 
-## Available Scripts
+Majority of the implementations are similar to the code snippets in [render-giphys](https://git.generalassemb.ly/SG-SEIF-6/basic-react-code-snippets/tree/master/render-giphys).
 
-In the project directory, you can run:
+The main differences between the 2 are:
 
-### `yarn start`
+- using `createAsyncThunk` to handle asynchronous calls
+- storing states of **giphy** and **favourties** in `redux` store
+- added a `Counter` component to track the number of times the API is called where the `action` to update the value of `counter` is dispatched within `createAsyncThunk`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Handle `rejected` API Calls
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+In Zhiquan's demo, the handling of API promises are implemented within `extraReducers` like this:
 
-### `yarn test`
+```js
+const userSlice = createSlice({
+	.
+	.
+	.
+	extraReducers: (builder) => {
+		builder.addCase(setUser.fulfilled, (previousState, action) => {
+			previousState.result = action.payload;
+			previousState.loading = false;
+			previousState.error = null;
+		});
+		builder.addCase(setUser.pending, (previousState, action) => {
+			previousState.result = null;
+			previousState.loading = true;
+			previousState.error = null;
+		});
+		builder.addCase(setUser.rejected, (previousState, action) => {
+			previousState.result = null;
+			previousState.loading = false;
+			previousState.error = "Failed to fetch the user";
+		});
+	}
+});
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+where its `loading` and `error` states are within the `redux` store as well.
 
-### `yarn build`
+If you feel there isn't a need to store these information in the `redux` store but within the component itself, a possible implementation would be something like this:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+// src/redux/giphy/giphySlice.js
+export const giphySlice = createSlice({
+	name: 'giphy',
+	initialState,
+	reducers: {
+		setGiphy: (state, action) => {
+			state.giphy = action.payload
+		}
+	},
+	extraReducers: builder => {
+		builder.addCase(fetchGiphy.fulfilled, (state, action) => {
+			state.giphy = action.payload
+			state.giphys.push(action.payload)
+		})
+	}
+})
+.
+.
+.
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Note that only `fulfilled` is handled within `extraReducers` since the handling of loading and error states is done within the `Giphy` component.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+// src/components/giphy/Giphy.js
+.
+.
+.
+const [isGettingGiphy, setIsGettingGiphy] = useState(true)
+const [fetchGiphyErrorMessage, setFetchGiphyErrorMessage] = useState(null)
+.
+.
+.
+const handleFetchNewGiphy = useCallback(
+	async payload => {
+		setIsGettingGiphy(true)
+		setFetchGiphyErrorMessage(null)
+		try {
+			await dispatch(fetchGiphy(payload)).unwrap()
+		} catch (error) {
+			setFetchGiphyErrorMessage(error.message)
+		}
+		setIsGettingGiphy(false)
+	}, [
+		dispatch
+	]
+)
+.
+.
+.
+```
 
-### `yarn eject`
+# Updating `redux` store within `createAsyncThunk`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Depending how your `redux` store is structured, you might want to update another slice of your store after the asynchronous API call is completed. You can do so within `createAsyncThunk`.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```js
+export const fetchGiphy = createAsyncThunk(
+	'giphy/fetchGiphy',
+	async (
+		payload,
+		{
+			dispatch,
+			rejectWithValue
+		}
+	) => {
+		try {
+			const response = await axios.get(
+				`${process.env.REACT_APP_API}/${payload.type}?api_key=${process.env.REACT_APP_API_KEY}${payload.query ? `&q=${payload.query}` : ''}`
+			)
+			const data = response.data.data
+			dispatch(updateCounter())
+			if (payload.type === 'random') {
+				return {
+					id: data.id,
+					src: data.fixed_width_downsampled_url,
+					title: data.title
+				}
+			} else {
+				return {
+					id: data[0]['id'],
+					src: data[0]['images']['original']['url'],
+					title: data[0]['title']
+				}
+			}
+		} catch (error) {
+			console.log(error.response.data)
+			return rejectWithValue(error.response.data)
+		}
+	}
+)
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The second argument of `createAsyncThunk` is known as the `payloadCreator`.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+A `payloadCreator` is:
 
-## Learn More
+> A callback function that should return a promise containing the result of some asynchronous logic....
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The second argument in the `payloadCreator` is known as the `thunkAPI` which is an object containing all of the parameters that are normally passed to a Redux thunk function, as well as additional options.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The additional options include:
 
-### Code Splitting
+- dispatch
+- getState
+- extra
+- requestId
+- signal
+- rejectWithValue(value, [meta])
+- fulfillWithValue(value, meta)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+You may read more about it [here](https://redux-toolkit.js.org/api/createAsyncThunk#payloadcreator).
 
-### Analyzing the Bundle Size
+In this example, notice `thunkAPI` is destructured and the action `updateCounter` is dispatched after asynchronous API call is completed.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Running this `react` app
 
-### Making a Progressive Web App
+- Create a `env` file `.env.development.local` in the root folder and add the following to the `env` file:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+REACT_APP_API=https://api.giphy.com/v1/gifs
+REACT_APP_API_KEY=yourgiphyapikey
+```
+- Replace "yourgiphyapikey" with your own API key
+- `npm install`
+- `npm start`
