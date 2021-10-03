@@ -16,9 +16,17 @@ In Zhiquan's demo, the handling of API promises are implemented within `extraRed
 
 ```js
 const userSlice = createSlice({
-	.
-	.
-	.
+	name: "user",
+	initialState: {
+		result: null,
+		loading: true,
+		error: null
+	},
+	reducers: {
+		setErrorInput: (previousState, action) => {
+			previousState.error = action.payload;
+		}
+	},
 	extraReducers: (builder) => {
 		builder.addCase(setUser.fulfilled, (previousState, action) => {
 			previousState.result = action.payload;
@@ -39,7 +47,7 @@ const userSlice = createSlice({
 });
 ```
 
-where its `loading` and `error` states are within the `redux` store as well.
+where its `loading` and `error` states are structured within the `redux` store as well.
 
 If you feel there isn't a need to store these information in the `redux` store but within the component itself, a possible implementation would be something like this:
 
@@ -95,6 +103,12 @@ const handleFetchNewGiphy = useCallback(
 .
 .
 ```
+
+Note the use of `unwrap()` after the dispatching `fetchGiphy`. It is necessary to call `unwrap`...
+
+> to extract the `payload` of a `fulfilled` action or to throw either the `error` or, if available, `payload` created by `rejectWithValue` from a `rejected` action.
+
+where the error will be thrown to the `catch` block. You can read more about it [here](https://redux-toolkit.js.org/api/createAsyncThunk#unwrapping-result-actions).
 
 # Updating `redux` store within `createAsyncThunk`
 
@@ -157,7 +171,7 @@ The additional options include:
 
 You may read more about it [here](https://redux-toolkit.js.org/api/createAsyncThunk#payloadcreator).
 
-In this example, notice `thunkAPI` is destructured and the action `updateCounter` is dispatched after asynchronous API call is completed.
+In this example, notice `thunkAPI` is destructured and the action `updateCounter` is dispatched after asynchronous API call is completed where a `counter` value tracks the number of times the giphy API is called.
 
 # Running this `react` app
 
